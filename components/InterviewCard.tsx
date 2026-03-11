@@ -28,17 +28,17 @@ const InterviewCard = async ({
 
   const badgeColor =
     {
-      Behavioral: "bg-light-400",
-      Mixed: "bg-light-600",
-      Technical: "bg-light-800",
-    }[normalizedType] || "bg-light-600";
+      Behavioral: "bg-blue-100 text-blue-700",
+      Mixed: "bg-purple-100 text-purple-700",
+      Technical: "bg-green-100 text-green-700",
+    }[normalizedType] || "bg-gray-100 text-gray-700";
 
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
   ).format("MMM D, YYYY");
 
   return (
-    <div className="card-border w-[360px] max-sm:w-full min-h-96">
+    <div className="w-[360px] max-sm:w-full min-h-96 border border-gray-100 rounded-2xl overflow-hidden">
       <div className="card-interview">
         <div>
           {/* Type Badge */}
@@ -48,7 +48,7 @@ const InterviewCard = async ({
               badgeColor
             )}
           >
-            <p className="badge-text ">{normalizedType}</p>
+            <p className="badge-text">{normalizedType}</p>
           </div>
 
           {/* Cover Image */}
@@ -61,7 +61,9 @@ const InterviewCard = async ({
           />
 
           {/* Interview Role */}
-          <h3 className="mt-5 capitalize">{role} Interview</h3>
+          <h3 className="mt-5 capitalize text-gray-900">
+            {role} Interview
+          </h3>
 
           {/* Date & Score */}
           <div className="flex flex-row gap-5 mt-3">
@@ -72,17 +74,19 @@ const InterviewCard = async ({
                 height={22}
                 alt="calendar"
               />
-              <p>{formattedDate}</p>
+              <p className="text-gray-600">{formattedDate}</p>
             </div>
 
             <div className="flex flex-row gap-2 items-center">
               <Image src="/star.svg" width={22} height={22} alt="star" />
-              <p>{feedback?.totalScore || "---"}/100</p>
+              <p className="text-gray-600">
+                {feedback?.totalScore || "---"}/100
+              </p>
             </div>
           </div>
 
           {/* Feedback or Placeholder Text */}
-          <p className="line-clamp-2 mt-5">
+          <p className="line-clamp-2 mt-5 text-gray-500">
             {feedback?.finalAssessment ||
               "You haven't taken this interview yet. Take it now to improve your skills."}
           </p>
@@ -91,7 +95,7 @@ const InterviewCard = async ({
         <div className="flex flex-row justify-between">
           <DisplayTechIcons techStack={techstack} />
 
-          <Button className="btn-primary">
+          <Button className="w-fit bg-brand-blue text-white hover:bg-brand-blue-dark rounded-full font-bold px-5 cursor-pointer min-h-10">
             <Link
               href={
                 feedback

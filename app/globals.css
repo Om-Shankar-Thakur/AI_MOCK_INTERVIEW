@@ -22,6 +22,10 @@
   --color-dark-200: #27282f;
   --color-dark-300: #242633;
 
+  --color-brand-blue: #4A90D9;
+  --color-brand-blue-light: #E8F0FE;
+  --color-brand-blue-dark: #3A7BD5;
+
   --font-mona-sans: "Mona Sans", sans-serif;
 
   --bg-pattern: url("/pattern.png");
@@ -29,37 +33,37 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --background: #f8f9fc;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #4A90D9;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f3f9;
+  --secondary-foreground: #1a1a2e;
+  --muted: #f1f3f9;
+  --muted-foreground: #6b7280;
+  --accent: #f1f3f9;
+  --accent-foreground: #1a1a2e;
+  --destructive: #ef4444;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #4A90D9;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #6b7280;
+  --sidebar-primary: #4A90D9;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #E8F0FE;
+  --sidebar-accent-foreground: #4A90D9;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #4A90D9;
 }
 
 .dark {
@@ -141,56 +145,12 @@
   body {
     @apply bg-background text-foreground;
   }
-  p {
-    @apply text-light-100;
-  }
-  h2 {
-    @apply text-3xl font-semibold;
-  }
-  h3 {
-    @apply text-2xl font-semibold;
-  }
-  ul {
-    @apply list-disc list-inside;
-  }
-  li {
-    @apply text-light-100;
-  }
 }
 
 @layer components {
-  .btn-call {
-    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
-
-    .span {
-      @apply bg-success-100 h-[85%] w-[65%];
-    }
-  }
-
-  .btn-disconnect {
-    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28;
-  }
-
-  .btn-upload {
-    @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
-  }
-  .btn-primary {
-    @apply w-fit !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
-  }
-  .btn-secondary {
-    @apply w-fit !bg-dark-200 !text-primary-200 hover:!bg-dark-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
-  }
-
-  .btn-upload {
-    @apply bg-dark-200 rounded-full min-h-12 px-5 cursor-pointer border border-input  overflow-hidden;
-  }
-
-  .card-border {
-    @apply border-gradient p-0.5 rounded-2xl w-fit;
-  }
-
-  .card {
-    @apply dark-gradient rounded-2xl min-h-full;
+  /* ─── Auth form styles (dark theme) ─── */
+  .auth-layout {
+    @apply flex items-center justify-center mx-auto max-w-7xl min-h-screen max-sm:px-4 max-sm:py-8;
   }
 
   .form {
@@ -209,42 +169,195 @@
     }
   }
 
+  /* ─── Button styles ─── */
+  .btn-call {
+    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
+
+    .span {
+      @apply bg-success-100 h-[85%] w-[65%];
+    }
+  }
+
+  .btn-disconnect {
+    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28;
+  }
+
+  .btn-primary {
+    @apply w-fit !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
+  }
+  .btn-secondary {
+    @apply w-fit !bg-dark-200 !text-primary-200 hover:!bg-dark-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
+  }
+
+  /* ─── Dashboard shell ─── */
+  .dashboard-shell {
+    @apply flex h-screen w-full overflow-hidden bg-[#f8f9fc];
+  }
+
+  .dashboard-sidebar {
+    @apply flex flex-col items-center w-16 bg-white border-r border-gray-100 py-4 gap-2 shrink-0;
+  }
+
+  .sidebar-icon {
+    @apply flex items-center justify-center w-10 h-10 rounded-xl text-gray-400 hover:text-brand-blue hover:bg-brand-blue-light transition-all duration-200 cursor-pointer;
+  }
+
+  .sidebar-icon-active {
+    @apply flex items-center justify-center w-10 h-10 rounded-xl bg-brand-blue text-white cursor-pointer;
+  }
+
+  .dashboard-topbar {
+    @apply flex items-center justify-between h-14 px-6 bg-white border-b border-gray-100 shrink-0;
+  }
+
+  .dashboard-content {
+    @apply flex-1 flex flex-col overflow-hidden;
+  }
+
+  .dashboard-main {
+    @apply flex-1 overflow-y-auto p-8;
+  }
+
+  /* ─── Interview mode selection cards ─── */
+  .mode-card {
+    @apply flex flex-col items-center justify-center gap-4 p-10 bg-white rounded-2xl border border-gray-100 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-brand-blue/30 min-w-[280px] flex-1 max-w-[400px];
+  }
+
+  .mode-card-icon {
+    @apply flex items-center justify-center w-20 h-20 rounded-full bg-brand-blue-light text-brand-blue;
+  }
+
+  /* ─── Interview layouts ─── */
+  .voice-layout {
+    @apply flex flex-col items-center justify-center gap-6 flex-1 py-12;
+  }
+
+  .voice-avatar {
+    @apply relative flex items-center justify-center w-40 h-40 rounded-full bg-brand-blue;
+  }
+
+  .voice-avatar-ring {
+    @apply absolute inset-[-4px] rounded-full border-[3px] border-brand-blue/40;
+  }
+
+  .video-layout {
+    @apply flex flex-row gap-6 flex-1 h-full min-h-0;
+  }
+
+  .video-feed {
+    @apply relative flex-1 bg-gray-900 rounded-2xl overflow-hidden flex items-center justify-center min-h-[400px];
+  }
+
+  .video-feed video {
+    @apply w-full h-full object-cover;
+  }
+
+  .transcript-panel {
+    @apply w-[380px] bg-white rounded-2xl border border-gray-100 flex flex-col overflow-hidden shrink-0;
+  }
+
+  .transcript-header {
+    @apply flex items-center gap-2 px-5 py-4 border-b border-gray-100;
+  }
+
+  .transcript-messages {
+    @apply flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-4;
+  }
+
+  .message-bubble-ai {
+    @apply flex flex-col items-end gap-1;
+  }
+
+  .message-bubble-user {
+    @apply flex flex-col items-start gap-1;
+  }
+
+  .bubble-ai {
+    @apply bg-brand-blue text-white px-4 py-3 rounded-2xl rounded-tr-sm max-w-[280px] text-sm leading-relaxed;
+  }
+
+  .bubble-user {
+    @apply bg-gray-100 text-gray-800 px-4 py-3 rounded-2xl rounded-tl-sm max-w-[280px] text-sm leading-relaxed;
+  }
+
+  /* ─── Call controls ─── */
+  .call-controls {
+    @apply flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg;
+  }
+
+  .control-btn {
+    @apply flex items-center justify-center w-11 h-11 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer;
+  }
+
+  .control-btn-end {
+    @apply flex items-center gap-2 px-6 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition-all duration-200 cursor-pointer text-sm;
+  }
+
+  /* ─── Existing components (updated for light theme) ─── */
+  .card-border {
+    @apply border border-gray-200 p-0.5 rounded-2xl w-fit;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl min-h-full shadow-sm;
+  }
+
+  .root-layout {
+    @apply flex mx-auto max-w-7xl flex-col gap-12 my-12 px-16 max-sm:px-4 max-sm:my-8;
+  }
+
+  .card-cta {
+    @apply flex flex-row bg-gradient-to-r from-brand-blue to-brand-blue-dark rounded-3xl px-16 py-6 items-center justify-between max-sm:px-4 text-white;
+  }
+
+  .interviews-section {
+    @apply flex flex-wrap gap-4 max-lg:flex-col w-full items-stretch;
+  }
+
+  .card-interview {
+    @apply bg-white rounded-2xl min-h-full flex flex-col p-6 relative overflow-hidden gap-10 justify-between shadow-sm border border-gray-100;
+
+    .badge-text {
+      @apply text-sm font-semibold capitalize;
+    }
+  }
+
   .call-view {
     @apply flex sm:flex-row flex-col gap-10 items-center justify-between w-full;
 
     h3 {
-      @apply text-center text-primary-100 mt-5;
+      @apply text-center text-brand-blue mt-5;
     }
 
     .card-interviewer {
-      @apply flex-center flex-col gap-2 p-7 h-[400px] blue-gradient-dark rounded-lg border-2 border-primary-200/50 flex-1 sm:basis-1/2 w-full;
+      @apply flex-center flex-col gap-2 p-7 h-[400px] bg-gradient-to-b from-blue-50 to-white rounded-lg border-2 border-brand-blue/20 flex-1 sm:basis-1/2 w-full;
     }
 
     .avatar {
-      @apply z-10 flex items-center justify-center blue-gradient rounded-full size-[120px] relative;
+      @apply z-10 flex items-center justify-center bg-gradient-to-br from-brand-blue-light to-brand-blue/20 rounded-full size-[120px] relative;
 
       .animate-speak {
-        @apply absolute inline-flex size-5/6 animate-ping rounded-full bg-primary-200 opacity-75;
+        @apply absolute inline-flex size-5/6 animate-ping rounded-full bg-brand-blue opacity-75;
       }
     }
 
     .card-border {
-      @apply border-gradient p-0.5 rounded-2xl flex-1 sm:basis-1/2 w-full h-[400px] max-md:hidden;
+      @apply border border-gray-200 p-0.5 rounded-2xl flex-1 sm:basis-1/2 w-full h-[400px] max-md:hidden;
     }
 
     .card-content {
-      @apply flex flex-col gap-2 justify-center items-center p-7 dark-gradient rounded-2xl min-h-full;
+      @apply flex flex-col gap-2 justify-center items-center p-7 bg-white rounded-2xl min-h-full;
     }
   }
 
   .transcript-border {
-    @apply border-gradient p-0.5 rounded-2xl w-full;
+    @apply border border-gray-200 p-0.5 rounded-2xl w-full;
 
     .transcript {
-      @apply dark-gradient rounded-2xl  min-h-12 px-5 py-3 flex items-center justify-center;
+      @apply bg-white rounded-2xl min-h-12 px-5 py-3 flex items-center justify-center shadow-sm;
 
       p {
-        @apply text-lg text-center text-white;
+        @apply text-lg text-center text-gray-700;
       }
     }
   }
@@ -257,40 +370,12 @@
     }
   }
 
-  .auth-layout {
-    @apply flex items-center justify-center mx-auto max-w-7xl min-h-screen max-sm:px-4 max-sm:py-8;
-  }
-
-  .root-layout {
-    @apply flex mx-auto max-w-7xl flex-col gap-12 my-12 px-16 max-sm:px-4 max-sm:my-8;
-  }
-
-  .card-cta {
-    @apply flex flex-row blue-gradient-dark rounded-3xl px-16 py-6 items-center justify-between max-sm:px-4;
-  }
-
-  .interviews-section {
-    @apply flex flex-wrap gap-4 max-lg:flex-col w-full items-stretch;
-  }
-
-  .interview-text {
-    @apply text-lg text-center text-white;
-  }
-
   .progress {
-    @apply h-1.5 text-[5px] font-bold bg-primary-200 rounded-full flex-center;
+    @apply h-1.5 text-[5px] font-bold bg-brand-blue rounded-full flex-center;
   }
 
   .tech-tooltip {
     @apply absolute bottom-full mb-1 hidden group-hover:flex px-2 py-1 text-xs text-white bg-gray-700 rounded-md shadow-md;
-  }
-
-  .card-interview {
-    @apply dark-gradient rounded-2xl min-h-full flex flex-col p-6 relative overflow-hidden gap-10 justify-between;
-
-    .badge-text {
-      @apply text-sm font-semibold capitalize;
-    }
   }
 }
 
@@ -330,5 +415,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
   }
 }

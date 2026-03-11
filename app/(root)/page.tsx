@@ -23,14 +23,17 @@ async function Home() {
 
   return (
     <>
-      <section className="card-cta">
-        <div className="flex flex-col gap-6 max-w-lg">
-          <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
-          <p className="text-lg">
-            Practice real interview questions & get instant feedback
+      {/* Hero CTA */}
+      <section className="flex flex-row bg-gradient-to-r from-brand-blue to-brand-blue-dark rounded-3xl px-12 py-8 items-center justify-between max-sm:px-6">
+        <div className="flex flex-col gap-4 max-w-lg">
+          <h2 className="text-3xl font-bold text-white">
+            Get Interview-Ready with AI-Powered Practice &amp; Feedback
+          </h2>
+          <p className="text-blue-100 text-lg">
+            Practice real interview questions &amp; get instant feedback
           </p>
 
-          <Button asChild className="btn-primary max-sm:w-full">
+          <Button asChild className="w-fit bg-white text-brand-blue hover:bg-blue-50 rounded-full font-bold px-6 min-h-10 cursor-pointer">
             <Link href="/interview">Start an Interview</Link>
           </Button>
         </div>
@@ -38,14 +41,15 @@ async function Home() {
         <Image
           src="/robot.png"
           alt="robo-dude"
-          width={400}
-          height={400}
+          width={300}
+          height={300}
           className="max-sm:hidden"
         />
       </section>
 
+      {/* Your Interviews */}
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Your Interviews</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Your Interviews</h2>
 
         <div className="interviews-section">
           {hasPastInterviews ? (
@@ -61,13 +65,16 @@ async function Home() {
               />
             ))
           ) : (
-            <p>You haven&apos;t taken any interviews yet</p>
+            <p className="text-gray-500">
+              You haven&apos;t taken any interviews yet
+            </p>
           )}
         </div>
       </section>
 
+      {/* Take Interviews */}
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take Interviews</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Take Interviews</h2>
 
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
@@ -83,7 +90,9 @@ async function Home() {
               />
             ))
           ) : (
-            <p>There are no interviews available</p>
+            <p className="text-gray-500">
+              There are no interviews available
+            </p>
           )}
         </div>
       </section>

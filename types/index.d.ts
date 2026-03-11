@@ -54,7 +54,10 @@ interface AgentProps {
   feedbackId?: string;
   type: "generate" | "interview";
   questions?: string[];
+  profileImage?: string;
 }
+
+type InterviewMode = "voice" | "video";
 
 interface RouteParams {
   params: Promise<Record<string, string>>;
