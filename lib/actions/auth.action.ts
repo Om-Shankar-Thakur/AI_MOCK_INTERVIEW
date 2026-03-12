@@ -1,22 +1,16 @@
 "use server";
 
-import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
+import { getDb } from "@/lib/mongodb";
 
 // Session duration (1 week)
 const SESSION_DURATION = 60 * 60 * 24 * 7;
 
-// Set session cookie
-export async function setSessionCookie(idToken: string) {
+// Set session cookie with user ID
+async function setSessionCookie(userId: string) {
   const cookieStore = await cookies();
 
-  // Create session cookie
-  const sessionCookie = await auth.createSessionCookie(idToken, {
-    expiresIn: SESSION_DURATION * 1000, // milliseconds
-  });
-
-  // Set cookie in the browser
-  cookieStore.set("session", sessionCookie, {
+  cookieStore.set("session", userId, {
     maxAge: SESSION_DURATION,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -26,23 +20,27 @@ export async function setSessionCookie(idToken: string) {
 }
 
 export async function signUp(params: SignUpParams) {
-  const { uid, name, email } = params;
+  const { name, email, password } = params;
 
   try {
+    const db = await getDb();
+    const usersCollection = db.collection("users");
+
     // check if user exists in db
-    const userRecord = await db.collection("users").doc(uid).get();
-    if (userRecord.exists)
+    const existingUser = await usersCollection.findOne({ email });
+    if (existingUser) {
       return {
         success: false,
         message: "User already exists. Please sign in.",
       };
+    }
 
     // save user to db
-    await db.collection("users").doc(uid).set({
+    await usersCollection.insertOne({
       name,
       email,
-      // profileURL,
-      // resumeURL,
+      password,
+      createdAt: new Date().toISOString(),
     });
 
     return {
@@ -52,14 +50,6 @@ export async function signUp(params: SignUpParams) {
   } catch (error: any) {
     console.error("Error creating user:", error);
 
-    // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
-      return {
-        success: false,
-        message: "This email is already in use",
-      };
-    }
-
     return {
       success: false,
       message: "Failed to create account. Please try again.",
@@ -68,19 +58,28 @@ export async function signUp(params: SignUpParams) {
 }
 
 export async function signIn(params: SignInParams) {
-  const { email, idToken } = params;
+  const { email, password } = params;
 
   try {
-    const userRecord = await auth.getUserByEmail(email);
-    if (!userRecord)
+    const db = await getDb();
+    const usersCollection = db.collection("users");
+
+    const user = await usersCollection.findOne({ email, password });
+    if (!user) {
       return {
         success: false,
-        message: "User does not exist. Create an account.",
+        message: "Invalid email or password. Please try again.",
       };
+    }
 
-    await setSessionCookie(idToken);
+    await setSessionCookie(user._id.toString());
+
+    return {
+      success: true,
+      message: "Signed in successfully.",
+    };
   } catch (error: any) {
-    console.log("");
+    console.error("Sign in error:", error);
 
     return {
       success: false,
@@ -104,18 +103,19 @@ export async function getCurrentUser(): Promise<User | null> {
   if (!sessionCookie) return null;
 
   try {
-    const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+    const db = await getDb();
+    const { ObjectId } = await import("mongodb");
+    const usersCollection = db.collection("users");
 
-    // get user info from db
-    const userRecord = await db
-      .collection("users")
-      .doc(decodedClaims.uid)
-      .get();
-    if (!userRecord.exists) return null;
+    const user = await usersCollection.findOne({
+      _id: new ObjectId(sessionCookie),
+    });
+    if (!user) return null;
 
     return {
-      ...userRecord.data(),
-      id: userRecord.id,
+      name: user.name,
+      email: user.email,
+      id: user._id.toString(),
     } as User;
   } catch (error) {
     console.log(error);

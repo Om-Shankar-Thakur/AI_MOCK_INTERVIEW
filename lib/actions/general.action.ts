@@ -2,8 +2,9 @@
 
 import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
+import { ObjectId } from "mongodb";
 
-import { db } from "@/firebase/admin";
+import { getDb } from "@/lib/mongodb";
 import { feedbackSchema } from "@/constants";
 
 export async function createFeedback(params: CreateFeedbackParams) {
@@ -49,17 +50,24 @@ export async function createFeedback(params: CreateFeedbackParams) {
       createdAt: new Date().toISOString(),
     };
 
-    let feedbackRef;
+    const db = await getDb();
+    const feedbackCollection = db.collection("feedback");
+
+    let resultId: string;
 
     if (feedbackId) {
-      feedbackRef = db.collection("feedback").doc(feedbackId);
+      await feedbackCollection.updateOne(
+        { _id: new ObjectId(feedbackId) },
+        { $set: feedback },
+        { upsert: true }
+      );
+      resultId = feedbackId;
     } else {
-      feedbackRef = db.collection("feedback").doc();
+      const result = await feedbackCollection.insertOne(feedback);
+      resultId = result.insertedId.toString();
     }
 
-    await feedbackRef.set(feedback);
-
-    return { success: true, feedbackId: feedbackRef.id };
+    return { success: true, feedbackId: resultId };
   } catch (error) {
     console.error("Error saving feedback:", error);
     return { success: false };
@@ -67,9 +75,29 @@ export async function createFeedback(params: CreateFeedbackParams) {
 }
 
 export async function getInterviewById(id: string): Promise<Interview | null> {
-  const interview = await db.collection("interviews").doc(id).get();
+  try {
+    const db = await getDb();
+    const interview = await db
+      .collection("interviews")
+      .findOne({ _id: new ObjectId(id) });
 
-  return interview.data() as Interview | null;
+    if (!interview) return null;
+
+    return {
+      id: interview._id.toString(),
+      role: interview.role,
+      level: interview.level,
+      questions: interview.questions,
+      techstack: interview.techstack,
+      createdAt: interview.createdAt,
+      userId: interview.userId,
+      type: interview.type,
+      finalized: interview.finalized,
+    } as Interview;
+  } catch (error) {
+    console.error("Error getting interview:", error);
+    return null;
+  }
 }
 
 export async function getFeedbackByInterviewId(
@@ -77,17 +105,23 @@ export async function getFeedbackByInterviewId(
 ): Promise<Feedback | null> {
   const { interviewId, userId } = params;
 
-  const querySnapshot = await db
+  const db = await getDb();
+  const feedbackDoc = await db
     .collection("feedback")
-    .where("interviewId", "==", interviewId)
-    .where("userId", "==", userId)
-    .limit(1)
-    .get();
+    .findOne({ interviewId, userId });
 
-  if (querySnapshot.empty) return null;
+  if (!feedbackDoc) return null;
 
-  const feedbackDoc = querySnapshot.docs[0];
-  return { id: feedbackDoc.id, ...feedbackDoc.data() } as Feedback;
+  return {
+    id: feedbackDoc._id.toString(),
+    interviewId: feedbackDoc.interviewId,
+    totalScore: feedbackDoc.totalScore,
+    categoryScores: feedbackDoc.categoryScores,
+    strengths: feedbackDoc.strengths,
+    areasForImprovement: feedbackDoc.areasForImprovement,
+    finalAssessment: feedbackDoc.finalAssessment,
+    createdAt: feedbackDoc.createdAt,
+  } as Feedback;
 }
 
 export async function getLatestInterviews(
@@ -95,31 +129,46 @@ export async function getLatestInterviews(
 ): Promise<Interview[] | null> {
   const { userId, limit = 20 } = params;
 
+  const db = await getDb();
   const interviews = await db
     .collection("interviews")
-    .orderBy("createdAt", "desc")
-    .where("finalized", "==", true)
-    .where("userId", "!=", userId)
+    .find({ finalized: true, userId: { $ne: userId } })
+    .sort({ createdAt: -1 })
     .limit(limit)
-    .get();
+    .toArray();
 
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+  return interviews.map((doc: any) => ({
+    id: doc._id.toString(),
+    role: doc.role,
+    level: doc.level,
+    questions: doc.questions,
+    techstack: doc.techstack,
+    createdAt: doc.createdAt,
+    userId: doc.userId,
+    type: doc.type,
+    finalized: doc.finalized,
   })) as Interview[];
 }
 
 export async function getInterviewsByUserId(
   userId: string
 ): Promise<Interview[] | null> {
+  const db = await getDb();
   const interviews = await db
     .collection("interviews")
-    .where("userId", "==", userId)
-    .orderBy("createdAt", "desc")
-    .get();
+    .find({ userId })
+    .sort({ createdAt: -1 })
+    .toArray();
 
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
+  return interviews.map((doc: any) => ({
+    id: doc._id.toString(),
+    role: doc.role,
+    level: doc.level,
+    questions: doc.questions,
+    techstack: doc.techstack,
+    createdAt: doc.createdAt,
+    userId: doc.userId,
+    type: doc.type,
+    finalized: doc.finalized,
   })) as Interview[];
 }
